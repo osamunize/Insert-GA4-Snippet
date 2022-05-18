@@ -21,7 +21,7 @@ This plugin inserts GA4 snippets into the site.
 
 == Frequently Asked Questions ==
 = Where do I get a GA4 Measurement ID? =
-Create an account and container in Google Analytics 4 and get it there.
+Create an account and property in Google Analytics 4 and get it there.
 
 == Installating ==
 1.Insert GA4 Snippet can be installed directly through your WordPress Plugins dashboard.
