@@ -31,51 +31,57 @@ defined( 'ABSPATH' ) || exit;
     $data_field_name = 'ga4_snippet';
 
 // DBから既存のオプション値を取得
-    $opt_val = get_option( $opt_name );
+    $opt_val = esc_js( get_option( $opt_name ));
 
 // ユーザーが何か情報を POST したかどうかを確認
-// POST していれば、隠しフィールドに 'Y' が設定されている
-    if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
+// nonceをチェック
+    if ( ! empty( $_POST ) && check_admin_referer( 'insert_ga4_snippet_action','insert_ga4_snippet_nonce_field' ) ) {
         // POST されたデータを取得
-        $opt_val = $_POST[ $data_field_name ];
-        // POST された値をDBに保存
-        update_option( $opt_name, $opt_val );
-        // 画面に「Setting Saves」メッセージを表示
+        $opt_val = esc_attr($_POST[ $data_field_name ]);
+        // 入力された値が不正の場合
+        if ( !preg_match('/^G-[0-9A-Z]{10}$/',$opt_val) ){
         ?>
-        <div class="updated"><p><strong><?php _e('Settings Saved.', 'ga4_snippet_menu' ); ?></strong></p></div>
-        <?php
+            <div class="error"><p><strong><?php esc_attr_e('Invalid Data.', 'ga4_snippet_menu' ); ?></strong></p></div>
+            <?php
+        }else{
+            // POST された値をDBに保存
+            update_option( $opt_name, $opt_val );
+            // 画面に「Setting Saves」メッセージを表示
+            ?>
+            <div class="updated"><p><strong><?php esc_attr_e('Settings Saved.', 'ga4_snippet_menu' ); ?></strong></p></div>
+            <?php
+        }
     }
 
     echo '<div class="wrap">';
     echo "<h2>" . __( 'Insert GA4 Snippet', 'ga4_snippet_menu' ) . "</h2>";
     ?>
-    <form name="form1" method="post" action="">
-    <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
-    <p><?php _e("GA4 Measurement ID (G-XXXXXXXXXX):", 'ga4_snippet_menu' ); ?> 
-    <input type="text" name="<?php echo $data_field_name; ?>" value="<?php echo $opt_val; ?>" size="20">
-    <p>If the value is empty or does not exist, no snippet is output.</p>
-    <p class="submit">
-    <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
-    </p>
+    <form name="insert-ga4-snippet-form" method="post" action="">
+        <?php wp_nonce_field( 'insert_ga4_snippet_action', 'insert_ga4_snippet_nonce_field' ); ?>
+        <input type="hidden" name="<?php echo esc_attr($hidden_field_name); ?>" value="Y">
+        <p><?php esc_attr_e("Measurement ID (G-XXXXXXXXXX):", 'ga4_snippet_menu' ); ?> 
+        <input type="text" name="<?php echo esc_attr($data_field_name); ?>" value="<?php echo esc_attr($opt_val); ?>" size="20">
+        <p class="submit">
+        <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
+        </p>
     </form>
     </div>
     <?php
     }
 
 function ga4_inserter_head(){
-    $opt_val = get_option( 'ga4_snippet' );
+    $opt_val = esc_js(get_option( 'ga4_snippet' ));
     if ( !null == $opt_val ){
-        echo '
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id='.$opt_val.'"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}';
         echo "
-          gtag('js', new Date());";
-        echo "       
-          gtag('config', '".$opt_val."');
-        </script>        
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id='.esc_attr($opt_val).'"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '.esc_attr($opt_val).');
+        </script>
         "."\n";}
     }
     add_action('wp_head', 'ga4_inserter_head' , 1);
