@@ -72,16 +72,17 @@ defined( 'ABSPATH' ) || exit;
 function ga4_inserter_head(){
     $opt_val = esc_js(get_option( 'ga4_snippet' ));
     if ( !null == $opt_val ){
-        echo "
+        echo '
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id='.esc_attr($opt_val).'"></script>
         <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag(){dataLayer.push(arguments);}';}
+        echo "
         gtag('js', new Date());
 
-        gtag('config', '.esc_attr($opt_val).');
+        gtag('config', '".esc_attr($opt_val)."');
         </script>
         "."\n";}
-    }
+    
     add_action('wp_head', 'ga4_inserter_head' , 1);
