@@ -1,4 +1,4 @@
-=== Insert GA4 Snippet ===
+=== Insert GA4 Snippet - Simple plugin to insert Google Analytics 4 snippets ===
 Contributors: osamunize
 Tags: snippet, google, analytics , ga4
 Requires at least: 5.9.3
@@ -12,7 +12,7 @@ This plugin inserts GA4 snippets into the site.
 
 == Description ==
 
-This plugin inserts GA4 snippets into the site.
+Very simple plugin to insert Google Analytics 4 snippets. Easy, lightweight, and simple.
 
 == Changelog ==
 
@@ -20,8 +20,8 @@ This plugin inserts GA4 snippets into the site.
 * Official Release
 
 == Frequently Asked Questions ==
-= Where do I get a GA4 Measurement ID? =
-Create an account and container in Google Analytics and get it there.
+= Where do I get a Google Analytics 4 Measurement ID? =
+Create an account and property in Google Analytics 4 and get it there.
 
 == Installating ==
 1.Insert GA4 Snippet can be installed directly through your WordPress Plugins dashboard.
