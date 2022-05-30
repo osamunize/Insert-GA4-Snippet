@@ -1,4 +1,7 @@
-# Insert GA4 Snippet（まだBetaです）
+# Insert GA4 Snippet
+
+## 今後の予定
+- UAとGAを選択、または併用できるようにする
 
 ## プラグインの説明
 - WordPressのHTMLにGoogleアナリティクス4のスニペットを挿入するだけのシンプルなプラグインです。
